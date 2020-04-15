@@ -1,0 +1,99 @@
+#!/bin/bash
+
+tr -d \\n | while read -n1 char;
+do
+txform="a a"
+        case $char in
+                [0-9])
+                        echo -n "The Number: "
+                ;;
+                A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z)
+                        echo -n "UPPERCASE: "
+                        txform="a-z A-Z"
+                ;;
+                a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)
+                        echo -n "lowercase: "
+                        char="$( tr a-z A-Z <<<"${char}" )"
+                        txform="A-Z a-z"
+                ;;
+                *)
+                        echo -n "The symbol: "
+                ;;
+        esac
+
+
+        case $char in
+                0) echo "Zero" ;;
+                1) echo "One" ;;
+                2) echo "Two" ;;
+                3) echo "Three" ;;
+                4) echo "Four" ;;
+                5) echo "Five" ;;
+                6) echo "Six" ;;
+                7) echo "Seven" ;;
+                8) echo "Eight" ;;
+                9) echo "Nine" ;;
+                A) echo "Alpha" ;;
+                B) echo "Bravo" ;;
+                C) echo "Charlie" ;;
+                D) echo "Delta" ;;
+                E) echo "Echo" ;;
+                F) echo "Foxtrot" ;;
+                G) echo "Golf" ;;
+                H) echo "Hotel" ;;
+                I) echo "India" ;;
+                J) echo "Juliet" ;;
+                K) echo "Kilo" ;;
+                L) echo "Lima" ;;
+                M) echo "Mike" ;;
+                N) echo "November" ;;
+                O) echo "Oscar" ;;
+                P) echo "Papa" ;;
+                Q) echo "Quebec" ;;
+                R) echo "Romeo" ;;
+                S) echo "Sierra" ;;
+                T) echo "Tango" ;;
+                U) echo "Uniform" ;;
+                V) echo "Victor" ;;
+                W) echo "Whiskey" ;;
+                X) echo "X-ray" ;;
+                Y) echo "Yankee" ;;
+                Z) echo "Zulu" ;;
+                '`') echo "\` (Backtiq)" ;;
+                "'") echo "\' (Single Quote)" ;;
+                '"') echo "\" (Double Quote)" ;;
+                '~') echo "~ (Tilde)" ;;
+                '!') echo "! (Exclamation)" ;;
+                '@') echo "@ (At)" ;;
+                '\#') echo "# (Pound)" ;;
+                '$') echo "$ (Dollar)" ;;
+                '%') echo "% (Percent)" ;;
+                '^') echo "^ (Carat)" ;;
+                '&') echo "& (Ampersand)" ;;
+                '*') echo "* (Asterisk)" ;;
+                '(') echo "( (Left Parenthesis)" ;;
+                ')') echo ") (Right Parenthesis)" ;;
+                '-') echo "- (Hyphen)" ;;
+                '_') echo "_ (Underscore)" ;;
+                '=') echo "= (Equals)" ;;
+                '+') echo "+ (Plus)" ;;
+                '{') echo "{ (Left Curly Brace)" ;;
+                '}') echo "} (Right Curly Brace)" ;;
+                '[') echo "[ (Left Square Bracket)" ;;
+                ']') echo "] (Right Square Bracket)" ;;
+                ';') echo "; (Semicolon)" ;;
+                ':') echo ": (Colon)" ;;
+                '<') echo "< (Less Than)" ;;
+                '>') echo "> (Greater Than)" ;;
+                ',') echo ", (Comma)" ;;
+                '.') echo ". (Period)" ;;
+                '?') echo "? (Question)" ;;
+                '/') echo "~ (Forward Slash)" ;;
+                '\') echo "~ (Backslash)" ;;
+                '|') echo "| (Pipe)" ;;
+
+
+                *) echo "${char}" ;;
+        esac | tr ${txform}
+done
+exit

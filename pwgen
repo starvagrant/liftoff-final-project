@@ -1,0 +1,10 @@
+#! /bin/bash
+#generate password store to variable
+PassWord="$(pwgen.bare)"
+HighLightStart="\033[32m"
+HighLightEnd="\033[00m"
+
+echo "${PassWord}"
+
+echo "Password repeated in NATO phonetic:"
+string2nato <<< "${PassWord}"
