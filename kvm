@@ -1,6 +1,10 @@
 #!/bin/bash
 
-if [ $# -lt 2 ]
+function hello() {
+   echo "Hello world"
+}
+
+if [ $# -lt 1 ]
 then
     echo "Usage kvm number [command]"
     exit 1
@@ -19,3 +23,22 @@ then
 fi
 
 echo $(basename -a $0) $1 $2
+
+if [ $# -eq 1 ]
+then
+    echo "kvm-launch"
+fi
+
+if [ $# -gt 1 ]
+then
+    command="$2"
+    echo "The command is: $command"
+    shift
+    shift
+    echo "The arguments are $@"
+fi
+
+if [ $command == "hello" ]
+then
+    hello
+fi
