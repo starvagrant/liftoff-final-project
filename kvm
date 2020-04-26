@@ -1,7 +1,23 @@
 #!/bin/bash
 
-function hello() {
-   echo "Hello world"
+function kvmlaunch() {
+    echo "kvmlaunch"
+}
+
+function ping() {
+    echo "ping $@"
+}
+
+function traceroute() {
+    echo "traceroute $@"
+}
+
+function lsiso() {
+    echo "lsiso $@"
+}
+
+function mount() {
+    echo "mount $@"
 }
 
 if [ $# -lt 1 ]
@@ -22,23 +38,29 @@ then
     exit 2
 fi
 
-echo $(basename -a $0) $1 $2
-
 if [ $# -eq 1 ]
 then
-    echo "kvm-launch"
+    kvmlaunch
 fi
 
 if [ $# -gt 1 ]
 then
     command="$2"
-    echo "The command is: $command"
     shift
     shift
-    echo "The arguments are $@"
 fi
 
-if [ $command == "hello" ]
-then
-    hello
-fi
+case $command in
+    ping)
+        ping $@
+        ;;
+    traceroute)
+        traceroute $@
+        ;;
+    lsiso)
+        lsiso $@
+        ;;
+    mount)
+        mount $@
+        ;;
+esac
