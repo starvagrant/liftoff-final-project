@@ -26,6 +26,12 @@ then
     exit 1
 fi
 
+if [ $1 == "help" ]
+then
+    shift
+    kvm-help $@
+fi
+
 if [ $1 -lt 1 ]
 then
     echo "Assign kvm a number 1-5"
