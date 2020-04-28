@@ -63,4 +63,4 @@ for the client accout, mail it so that it appears in the ticket
 system, and then launch a kvm console.
 
 If you do NOT wish to change the client password, use kvm launch
-instead.
+instead."
