@@ -1,110 +1,8 @@
 #!/bin/bash
 . ~/.kvmrc
-UnitNumber=""
-DomainName=""
-WorkDir=/tmp/kvm/
-ChangePassword=""
-HelpPrompt="KVM CLI
-Usage:
-KVM <number> [--unmount|--mount <iso-file>]
-"
-
-function setShellEnvironment() {
-    # saner programming env: these switches turn some bugs into errors
-    set -o errexit -o pipefail -o noclobber -o nounset
-
-    # -allow a command to fail with !’s side effect on errexit
-    # -use return value from ${PIPESTATUS[0]}, because ! hosed $?
-    ! getopt --test > /dev/null
-    if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
-        echo 'I’m sorry, `getopt --test` failed in this environment.'
-        exit 1
-    fi
-}
-
-function parseArgs() {
-    OPTIONS=hum:
-    LONGOPTS=help,umount,mount:
-
-    # -regarding ! and PIPESTATUS see above
-    # -temporarily store output to be able to check for errors
-    # -activate quoting/enhanced mode (e.g. by writing out “--options”)
-    # -pass arguments only via   -- "$@"   to separate them correctly
-    ! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
-    if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
-        # e.g. return value is 1
-        #  then getopt has complained about wrong arguments to stdout
-        exit 2
-    fi
-    # read getopt’s output this way to handle the quoting right:
-    eval set -- "$PARSED"
-
-    umount=n mountFile=- h=n
-    # now enjoy the options in order and nicely split until we see --
-    while true; do
-        case "$1" in
-            -h|--help)
-                h="help"
-                shift
-                ;;
-            -u|--umount)
-                umount=yes
-                shift
-                ;;
-            -m|--mount)
-                mountFile="$2"
-                shift 2
-                ;;
-            --)
-                shift
-                break
-                ;;
-            *)
-                echo "Programming error"
-                exit 3
-                ;;
-        esac
-    done
-
-}
-
-function generateSecurePassword() {
-   pwgen | tee ${WorkDir}/kvm-mail
-   NewPassWord=`head -1 ${WorkDir}/kvm-mail`
-}
-
-function getKvmNumber() {
-    local SelfName="${0}"
-    local TrailingNumber="$( grep -Eo '[0-9]+$' <<< "${SelfName}" )"
-    TrailingNumber="$( grep -Eo '[0-9]+$' <<< "${SelfName}" )"
-    echo tn is ${TrailingNumber}
-    #If started via numbered link, infer kvm number from that
-    if [[ "${TrailingNumber}" != "" ]]
-    then
-        echo 'Detected KVMoIP unit number during invocation....'
-        UnitNumber="${TrailingNumber}"
-
-    else
-        while [[ $UnitNumber -le 0 ]] || [[ $UnitNumber -ge 6 ]]
-        do
-            echo 'What KVM Unit do you want? Valid numbers are 1-5.'
-            read UnitNumber
-        done
-    fi
-        echo 'Targeting KVMoIP number '"${UnitNumber}"
-}
-function getKvmUrl() {
-
-    local DomainNameBeforeUnitNumber='KVM'
-    local DomainNameAfterUnitNumber='.UnrealServers.net'
-    DomainName="${DomainNameBeforeUnitNumber}${UnitNumber}${DomainNameAfterUnitNumber}"
-
-}
-
-function getUserPasswordWishes() {
-        echo 'Do you want to change the password to client one account? Type yes to change'
-        read ChangePassword
-}
+UnitNumber="$1"
+WorkDir=~/.kvm/$1
+DomainName="KVM$1.UnrealServers.net"
 
 function makeWorkingDirectory() {
     mkdir -p ${WorkDir}
@@ -121,22 +19,6 @@ function downloadJnlpLauncher() {
     curl -s 'http://'"${DomainName}"'/spider.jnlp' -b "${WorkDir}/jar" > "${WorkDir}/spider.jnlp"
 }
 
-function changeClientOneAuthentication() {
-    echo 'Changing client one password'
-    curl -s --http1.0 -L -F 'FV_0_umusers=client1' -F 'FV_1_umusers=client1' -F 'FV_2_umusers=Client One' -F "FV_3_umusers=${NewPassWord}" -F "FV_4_umusers=${NewPassWord}" -F 'FV_5_umusers=' -F 'FV_6_umusers=' -F 'FV_7_umusers=3' -F 'action_modify_user=Modify' -F 'FV_0_umgroups=' -F 'FV_2_umgroups=' -F '__templates__=umusers umgroups umusers umgroups' -b "${WorkDir}/jar" "${DomainName}/um.asp" > /dev/null
-
-}
-
-function mountSambaShareIso() {
-    echo "Mounting Samba Share Iso"
-    curl -s --http1.0 -L -F 'FV_0_vfloppyextern="0"' -F 'FV_1_vfloppyextern=pm.unrealservers.net' -F 'FV_2_vfloppyextern=isos' -F "FV_3_vfloppyextern=$mountFile" -F 'FV_4_vfloppyextern=""' -F 'FV_5_vfloppyextern=""' -F 'action_vfloppy_smb_set=" Set "' -b "${WorkDir}/jar" "${DomainName}/vmedia.asp" > /dev/null
-}
-
-function mailClientCredentials() {
-    echo "You machine has had remote access hooked up to a ${DomainName} with a password of: " | cat - ${WorkDir}/kvm-mail >> ${WorkDir}/kvm-mail-message.txt
-    mail -s "New client1 Login Credentials for ${DomainName}" support@unrealservers.net < ${WorkDir}/kvm-mail-message.txt
-}
-
 function validateJnlpFile() {
 
     if grep "Moved to this" "${WorkDir}/spider.jnlp"
@@ -151,12 +33,6 @@ function removeCookieJar() {
 
 }
 
-function removeMailMessage() {
-    rm "${WorkDir}/kvm-mail"
-    rm "${WorkDir}/kvm-mail-message.txt"
-}
-
-
 function launchSpider() {
     echo 'Launching viewer'
     javaws "${WorkDir}/spider.jnlp" &
@@ -166,38 +42,8 @@ function launchSpider() {
     echo cleaned up spider.jnlp
 }
 
-setShellEnvironment
-parseArgs $@
-
-if [[ $h == "help" ]]
-then
-    echo $HelpPrompt
-    exit 0
-fi
-
-getKvmNumber
-getKvmUrl
-getUserPasswordWishes
 makeWorkingDirectory
 authenticateWithCurl
-
-if [[ ${ChangePassword^^} == "YES" ]]
-then
-    generateSecurePassword
-    changeClientOneAuthentication
-    mailClientCredentials
-    removeMailMessage
-fi
-if [[ $mountFile != - ]]
-then
-    if [[ $umount == "yes" ]]
-    then
-    echo "conflicting options specified. Specify --mount or --umount."
-    exit 4
-    fi
-    mountSambaShareIso
-fi
-
 downloadJnlpLauncher
 validateJnlpFile
 removeCookieJar
