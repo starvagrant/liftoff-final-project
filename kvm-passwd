@@ -1,10 +1,8 @@
 #!/bin/bash
 . ~/.kvmrc
-
-WorkDir="~/.kvm/$1"
+WorkDir=~/.kvm/$1
 DomainName="kvm$1.unrealservers.net"
 NewPassword=`./pwgen.bare`
-NewPasswordNato=echo "$NewPassWord" | ./string2nato
 
 if [ $1 -lt 0 ] || [ $1 -gt 5 ]
 then
@@ -20,13 +18,14 @@ function authenticateWithCurl() {
 
 function changeClientOneAuthentication() {
     echo 'Changing client one password'
-    curl -s --http1.0 -L -F 'FV_0_umusers=client1' -F 'FV_1_umusers=client1' -F 'FV_2_umusers=Client One' -F "FV_3_umusers=${NewPassWord}" -F "FV_4_umusers=${NewPassWord}" -F 'FV_5_umusers=' -F 'FV_6_umusers=' -F 'FV_7_umusers=3' -F 'action_modify_user=Modify' -F 'FV_0_umgroups=' -F 'FV_2_umgroups=' -F '__templates__=umusers umgroups umusers umgroups' -b "${WorkDir}/jar" "${DomainName}/um.asp" > /dev/null
+    curl -s --http1.1 -L -F 'FV_0_umusers=client1' -F 'FV_1_umusers=client1' -F 'FV_2_umusers=Client One' -F "FV_3_umusers=${NewPassWord}" -F "FV_4_umusers=${NewPassWord}" -F 'FV_5_umusers=' -F 'FV_6_umusers=' -F 'FV_7_umusers=3' -F 'action_modify_user=Modify' -F 'FV_0_umgroups=' -F 'FV_2_umgroups=' -F '__templates__=umusers umgroups umusers umgroups' -b "${WorkDir}/jar" "${DomainName}/um.asp" > /dev/null
 
 }
 
 function saveClientOnePassword() {
-    echo "$NewPassword" > "$WorkDir/ClientPass"
-    echo "$NewPassword\n$NewPasswordNato" > "$WorkDir/ClientPhoenticPass"
+   echo ${NewPassword} > ${WorkDir}/Password
+   echo ${NewPassword} > ${WorkDir}/PasswordNato
+   echo ${NewPassword} | ./string2nato >> ${WorkDir}/PasswordNato
 }
 
 authenticateWithCurl
