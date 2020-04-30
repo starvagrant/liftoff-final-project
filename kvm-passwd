@@ -10,6 +10,11 @@ then
     exit 1
 fi
 
+function makeWorkingDirectory() {
+    mkdir -p ${WorkDir}
+}
+
+
 function authenticateWithCurl() {
     local DataString='nickname=&login='"${User}"'&password='"${Password}"'&action_login=Login'
     echo 'Logging in...'
@@ -28,6 +33,7 @@ function saveClientOnePassword() {
    echo ${NewPassword} | ./string2nato >> ${WorkDir}/PasswordNato
 }
 
+makeWorkingDirectory
 authenticateWithCurl
 changeClientOneAuthentication
 saveClientOnePassword
