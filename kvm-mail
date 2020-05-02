@@ -1,0 +1,16 @@
+#!/bin/bash
+. ~/.kvmrc
+WorkDir=~/.kvm/$1
+DomainName="kvm$1.unrealservers.net"
+
+function makeWorkingDirectory() {
+    mkdir -p ${WorkDir}
+}
+
+function mailClientCredentials() {
+    echo "You machine has had remote access hooked up to a ${DomainName} with a password of:\n " | cat - ${WorkDir}/PasswordNato > ${WorkDir}/kvm-client-mail.txt
+    mail -s "New client1 Login Credentials for ${DomainName}" support@unrealservers.net < ${WorkDir}/kvm-client-mail.txt
+}
+
+makeWorkingDirectory
+mailClientCredentials
