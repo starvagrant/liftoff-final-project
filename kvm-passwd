@@ -2,13 +2,26 @@
 . ~/.kvmrc
 WorkDir=~/.kvm/$1
 DomainName="kvm$1.unrealservers.net"
-NewPassword=`./pwgen.bare`
+NewPassWord=`./pwgen.bare`
 
 if [ $1 -lt 0 ] || [ $1 -gt 5 ]
 then
     echo "provide 0 for all kvms or 1-5 for a specific kvm"
     exit 1
 fi
+
+function setShellEnvironment() {
+    # saner programming env: these switches turn some bugs into errors
+    set -o errexit -o pipefail -o noclobber -o nounset
+
+    # -allow a command to fail with !’s side effect on errexit
+    # -use return value from ${PIPESTATUS[0]}, because ! hosed $?
+    ! getopt --test > /dev/null
+    if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
+        echo 'I’m sorry, `getopt --test` failed in this environment.'
+        exit 1
+    fi
+}
 
 function makeWorkingDirectory() {
     mkdir -p ${WorkDir}
@@ -19,20 +32,24 @@ function authenticateWithCurl() {
     local DataString='nickname=&login='"${User}"'&password='"${Password}"'&action_login=Login'
     echo 'Logging in...'
     curl -s --data "${DataString}" 'http://'"${DomainName}"'/auth.asp' -c "${WorkDir}/jar" > /dev/null
+    echo $?
 }
 
 function changeClientOneAuthentication() {
     echo 'Changing client one password'
-    curl -s --http1.1 -L -F 'FV_0_umusers=client1' -F 'FV_1_umusers=client1' -F 'FV_2_umusers=Client One' -F "FV_3_umusers=${NewPassWord}" -F "FV_4_umusers=${NewPassWord}" -F 'FV_5_umusers=' -F 'FV_6_umusers=' -F 'FV_7_umusers=3' -F 'action_modify_user=Modify' -F 'FV_0_umgroups=' -F 'FV_2_umgroups=' -F '__templates__=umusers umgroups umusers umgroups' -b "${WorkDir}/jar" "${DomainName}/um.asp" > /dev/null
+    curl -s --http1.0 -L -F 'FV_0_umusers=client1' -F 'FV_1_umusers=client1' -F 'FV_2_umusers=Client One' -F "FV_3_umusers=${NewPassWord}" -F "FV_4_umusers=${NewPassWord}" -F 'FV_5_umusers=' -F 'FV_6_umusers=' -F 'FV_7_umusers=3' -F 'action_modify_user=Modify' -F 'FV_0_umgroups=' -F 'FV_2_umgroups=' -F '__templates__=umusers umgroups umusers umgroups' -b "${WorkDir}/jar" "${DomainName}/um.asp" > /dev/null
+    echo $?
 
 }
 
 function saveClientOnePassword() {
-   echo ${NewPassword} > ${WorkDir}/Password
-   echo ${NewPassword} > ${WorkDir}/PasswordNato
-   echo ${NewPassword} | ./string2nato >> ${WorkDir}/PasswordNato
+   rm ${WorkDir}/Password ${WorkDir}/PasswordNato
+   echo ${NewPassWord} > ${WorkDir}/Password
+   echo ${NewPassWord} > ${WorkDir}/PasswordNato
+   echo ${NewPassWord} | ./string2nato >> ${WorkDir}/PasswordNato
 }
 
+setShellEnvironment
 makeWorkingDirectory
 authenticateWithCurl
 changeClientOneAuthentication
