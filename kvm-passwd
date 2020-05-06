@@ -43,7 +43,8 @@ function changeClientOneAuthentication() {
 }
 
 function saveClientOnePassword() {
-   rm ${WorkDir}/Password ${WorkDir}/PasswordNato
+   if [ -f ${WorkDir}/Password ]; then rm ${WorkDir}/Password; fi
+   if [ -f ${WorkDir}/PasswordNato ]; then rm ${WorkDir}/PasswordNato; fi
    echo ${NewPassWord} > ${WorkDir}/Password
    echo ${NewPassWord} > ${WorkDir}/PasswordNato
    echo ${NewPassWord} | ./string2nato >> ${WorkDir}/PasswordNato
