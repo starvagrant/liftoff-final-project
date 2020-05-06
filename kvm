@@ -1,25 +1,5 @@
 #!/bin/bash
 
-function kvmlaunch() {
-    echo "kvmlaunch"
-}
-
-function ping() {
-    echo "ping $@"
-}
-
-function traceroute() {
-    echo "traceroute $@"
-}
-
-function lsiso() {
-    echo "lsiso $@"
-}
-
-function mount() {
-    echo "mount $@"
-}
-
 if [ $# -lt 1 ]
 then
     echo "Usage kvm number [command]"
@@ -32,9 +12,10 @@ then
     kvm-help $@
 fi
 
-if [ $1 -lt 1 ]
+if [ $1 -lt 0 ]
 then
     echo "Assign kvm a number 1-5"
+    echo "Or use 0 for commands that support wildcards"
     exit 2
 fi
 
@@ -46,27 +27,37 @@ fi
 
 if [ $# -eq 1 ]
 then
-    kvmlaunch
+    kvm-passwd
+    kvm-mail
+    kvm-launch
+    kvm-clean
 fi
 
 if [ $# -gt 1 ]
 then
-    command="$2"
+    kvmnumber="$1"
+    kvmcommand="$2"
     shift
     shift
 fi
 
-case $command in
+case $kvmcommand in
     ping)
-        ping $@
+        kvm-ping $1 $@
         ;;
     traceroute)
-        traceroute $@
+        kvm-traceroute $1 $@
         ;;
-    lsiso)
-        lsiso $@
+    launch)
+        kvm-launch $1 $@
         ;;
-    mount)
-        mount $@
+    passwd)
+        kvm-passwd $1 $@
+        ;;
+    mail)
+        kvm-mail $1 $@
+        ;;
+    clean)
+        kvm-clean $1 $@
         ;;
 esac
