@@ -1,0 +1,23 @@
+#!/bin/bash
+. ~/.kvmrc
+
+if [ $1 -lt 0 ] || [ $1 -gt 5 ]
+then
+    echo "provide 0 for all kvms or 1-5 for a specific kvm"
+    exit 1
+fi
+
+. ~/.kvm/0/.kvminfo
+
+if [ $1 -eq 0 ]
+then
+    for ip in ${kvmips[@]};
+    do
+        traceroute $ip
+    done
+else
+    kvmunit=$1
+    kvmunit=$((i+1))
+    kvmip="${kvmips[$kvmunit]}"
+    traceroute $kvmip
+fi

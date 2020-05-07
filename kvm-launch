@@ -1,0 +1,50 @@
+#!/bin/bash
+. ~/.kvmrc
+UnitNumber="$1"
+WorkDir=~/.kvm/$1
+DomainName="KVM$1.UnrealServers.net"
+
+function makeWorkingDirectory() {
+    mkdir -p ${WorkDir}
+}
+
+function authenticateWithCurl() {
+    local DataString='nickname=&login='"${User}"'&password='"${Password}"'&action_login=Login'
+    echo 'Logging in...'
+    curl -s --data "${DataString}" 'http://'"${DomainName}"'/auth.asp' -c "${WorkDir}/jar" > /dev/null
+}
+
+function downloadJnlpLauncher() {
+    echo 'Getting jnlp launcher shortcut'
+    curl -s 'http://'"${DomainName}"'/spider.jnlp' -b "${WorkDir}/jar" > "${WorkDir}/spider.jnlp"
+}
+
+function validateJnlpFile() {
+
+    if grep "Moved to this" "${WorkDir}/spider.jnlp"
+    then
+        echo failed to get javaws file.  check ${WorkDir} for evidence of failed login in cookiejar or bad jnlp file
+        exit
+    fi
+}
+
+function removeCookieJar() {
+    rm "${WorkDir}/jar"
+
+}
+
+function launchSpider() {
+    echo 'Launching viewer'
+    javaws "${WorkDir}/spider.jnlp" &
+
+    sleep 30
+    rm "${WorkDir}/spider.jnlp"
+    echo cleaned up spider.jnlp
+}
+
+makeWorkingDirectory
+authenticateWithCurl
+downloadJnlpLauncher
+validateJnlpFile
+removeCookieJar
+launchSpider

@@ -1,0 +1,66 @@
+#!/bin/bash
+
+echo "General instructions for the kvm command
+Syntax: kvm number [command]
+Where number is 0-5.
+1-5 represents a specific kvm unit
+0 is a wildcard for all kvms (and is not implemented for all commands)
+
+If a command is not provided, kvm will launch a KVM console
+for the kvm in question (1-5)
+
+The following commands are available for diagnostic purposes and
+support wildcards:
+
+kvm ping
+kvm traceroute
+
+The following commands are to help make available kvm functionality
+for individual customers and do not support wildcards:
+
+kvm passwd
+kvm launch
+kvm mail
+kvm loadiso
+
+The following commands are device agnostic. They do not need a
+kvm number internally, but accept one nonetheless.
+
+kvm lsisos"
+
+echo "Purpose of individual commands
+
+kvm ping: allows one to ping 1 or all kvms without you having to
+    remember their ips. Gives the user a speedy reference.
+kvm traceroute: allows one to traceroute 1 or all kvms without
+    you having to remember their ips. Gives the user a speedy
+    and more complete reference.
+
+kvm passwd: changes the client user password to a strong, randomly
+    generated password.
+kvm launch: launches the kvm console (it does not change an
+    passwords)
+kvm mail: emails the latest message about a specific kvm to the
+    so that it shows up in the company ticket system. This
+    information should be the new password for the client
+    account.
+kvm loadiso: sends an iso from the local samba server to the
+    kvm unit for reinstallation purposes.
+
+kvm lsisos: queries the local samba server for which isos are
+    available to be loaded."
+
+echo "The default command is kvm number
+
+For instance, one may type kvm 2
+This will lead to the following results:
+    kvm 2 passwd
+    kvm 2 mail
+    kvm 2 launch
+
+In short the default command will generate a new kvm password
+for the client accout, mail it so that it appears in the ticket
+system, and then launch a kvm console.
+
+If you do NOT wish to change the client password, use kvm launch
+instead."
