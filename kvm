@@ -10,6 +10,7 @@ if [ $1 == "help" ]
 then
     shift
     kvm-help $@
+    exit
 fi
 
 if [ $1 -lt 0 ]
