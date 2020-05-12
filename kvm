@@ -28,10 +28,10 @@ fi
 
 if [ $# -eq 1 ]
 then
-    ./kvm-passwd $1
-    ./kvm-mail $1
-    ./kvm-launch $1
-    ./kvm-clean $1
+    kvm-passwd $1
+    kvm-mail $1
+    kvm-launch $1
+    kvm-clean $1
 fi
 
 if [ $# -gt 1 ]
@@ -44,21 +44,21 @@ fi
 
 case $kvmcommand in
     ping)
-        ./kvm-ping $kvmnumber $@
+        kvm-ping $kvmnumber $@
         ;;
     traceroute)
-        ./kvm-traceroute $kvmnumber $@
+        kvm-traceroute $kvmnumber $@
         ;;
     launch)
-        ./kvm-launch $kvmnumber $@
+        kvm-launch $kvmnumber $@
         ;;
     passwd)
-        ./kvm-passwd $kvmnumber $@
+        kvm-passwd $kvmnumber $@
         ;;
     mail)
-        ./kvm-mail $kvmnumber $@
+        kvm-mail $kvmnumber $@
         ;;
     clean)
-        ./kvm-clean $kvmnumber $@
+        kvm-clean $kvmnumber $@
         ;;
 esac
