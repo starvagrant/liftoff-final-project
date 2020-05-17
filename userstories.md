@@ -38,8 +38,28 @@ format.
     I want a help menu
     So that I know what commands are available to the kvm script
 
+9.  As a network technician,
+    I would like to have a installation preloaded into the
+    kvm.
+
 ## User Stories Completed
 
 1. The following command kvm 0 ping fulfills this request.
 2. The following command kvm 0 traceroute fulfills this request.
+3. The following command kvm <number> passwd fulfills this request.
+4. The following command kvm <number> mail fulfills this request.
 8. The following command kvm help fulfills this request.
+
+## Next User Stories
+
+7. Finish the command kvm lsiso.
+9. Finish the line kvm mount.
+
+## Later User Stories.
+
+5. Consider command kvm checksum for this purpose.
+6. This seems outside the scope of the project. The use of a key to
+activate MS Windows is something under customer control, determining
+when it expires would mean getting customer data which we avoid. It
+is a waste of time to debug a Windows server that's down over Windows
+subscription issues, but the issue is rare.
