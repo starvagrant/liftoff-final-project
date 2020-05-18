@@ -5,6 +5,8 @@ DomainName="kvm$1.unrealservers.net"
 ShareIP="66.181.33.30"
 ShareFolder="isos"
 ShareIso="ewc.img"
+Blank=""
+Set=" Set "
 
 function authenticateWithCurl() {
     local DataString='nickname=&login='"${User}"'&password='"${Password}"'&action_login=Login'
@@ -14,7 +16,7 @@ function authenticateWithCurl() {
 
 function loadiso() {
     echo 'Loading iso file'
-    curl -s --http1.1 -L -F 'FV_0_vfloppyextern=0' -F "FV_1_vfloppyextern=${ShareIP}" -F "FV_2_vfloppyextern=${ShareFolder}" -F "FV_3_vfloppyextern=${ShareIso}" -F "FV_4_vfloppyexterm=" -F 'FV_5_vfloppyextern=""' -F 'action_vfloppy_smb_set=" Set "' -b "${WorkDir}/jar" "${DomainName}/um.asp" > /dev/null
+    curl -v --http1.1 -L -F 'FV_0_vfloppyextern=0' -F "FV_1_vfloppyextern=${ShareIP}" -F "FV_2_vfloppyextern=${ShareFolder}" -F "FV_3_vfloppyextern=${ShareIso}" -F "FV_4_vfloppyexterm=" -F "FV_5_vfloppyextern=" -F "action_vfloppy_smb_set=${Set}" -b "${WorkDir}/jar" "${DomainName}/vmedia.asp" > /dev/null
 
 }
 
