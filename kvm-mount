@@ -16,7 +16,7 @@ function authenticateWithCurl() {
 
 function loadiso() {
     echo 'Loading iso file'
-    curl -s --http1.0 -L -F 'FV_1_vmediaoptions=yes' -F 'FV_2_vmediaoptions=yes' -F '__reset_to_defaults__=yes' -F 'FV_0_vfloppyextern=0' -F 'FV_1_vfloppyextern=66.181.33.30' -F 'FV_2_vfloppyextern=isos' -F 'FV_3_vfloppyextern=ewc.img' -F 'FV_4_vfloppyextern=' -F 'FV_5_vfloppyextern=' -F 'action_vfloppy_smb_set= Set ' -F 'vfloppy_ms_index=0' -F 'vfloppy_file=' -F '__templates__= vfloppyactive vmediaoptions vfloppyextern vfloppyintern vfloppyactive vmediaoptions vfloppyextern vfloppyintern' -b "${WorkDir}/jar" "${DomainName}/vmedia.asp" > /dev/null
+    curl -s -L -F 'FV_1_vmediaoptions=yes' -F 'FV_2_vmediaoptions=yes' -F '__reset_to_defaults__=yes' -F 'FV_0_vfloppyextern=0' -F 'FV_1_vfloppyextern=66.181.33.30' -F 'FV_2_vfloppyextern=isos' -F 'FV_3_vfloppyextern=bootimage.iso' -F 'FV_4_vfloppyextern=' -F 'FV_5_vfloppyextern=' -F 'action_vfloppy_smb_set= Set ' -F 'vfloppy_ms_index=0' -F 'vfloppy_file=' -F '__templates__= vfloppyactive vmediaoptions vfloppyextern vfloppyintern vfloppyactive vmediaoptions vfloppyextern vfloppyintern' -b "${WorkDir}/jar" "${DomainName}/vmedia.asp" > /dev/null
 }
 
 authenticateWithCurl
