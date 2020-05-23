@@ -1,10 +1,10 @@
 #!/bin/bash
 . ~/.kvmrc
-WorkDir=~/.kvm/$1
+WorkDir=/tmp/kvm
 DomainName="kvm$1.unrealservers.net"
 ShareIP="66.181.33.30"
 ShareFolder="isos"
-ShareIso="ewc.img"
+ShareIso="bootimage.iso"
 Blank=""
 Set=" Set "
 
