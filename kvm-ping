@@ -17,7 +17,7 @@ then
     done
 else
     kvmunit=$1
-    kvmunit=$((i+1))
+    kvmunit=$(($kvmunit-1))
     kvmip="${kvmips[$kvmunit]}"
     ping -c 3 $kvmip
 fi
