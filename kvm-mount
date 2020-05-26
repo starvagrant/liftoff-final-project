@@ -1,6 +1,6 @@
 #!/bin/bash
 . ~/.kvmrc
-WorkDir=/tmp/kvm
+WorkDir=~/.kvm/$1
 DomainName="kvm$1.unrealservers.net"
 ShareIP="66.181.33.30"
 ShareFolder="isos"

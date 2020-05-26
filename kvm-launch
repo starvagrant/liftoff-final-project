@@ -1,7 +1,7 @@
 #!/bin/bash
 . ~/.kvmrc
 UnitNumber="$1"
-WorkDir=/tmp/kvm
+WorkDir=~/.kvm/$1
 DomainName="kvm$1.unrealservers.net"
 
 function makeWorkingDirectory() {
