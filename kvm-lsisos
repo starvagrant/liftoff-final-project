@@ -5,7 +5,10 @@ DomainName="kvm$1.unrealservers.net"
 ShareIP="66.181.33.30"
 
 function listAvailableIsoFiles() {
-    smbclient \\\\${ShareIP}\\isos -Nc ls
+   # smbclient \\\\${ShareIP}\\isos -Nc ls
+   echo "2016.iso\t:Windows 2019 Server"
+   echo "2019.iso\t:Windows 2019 Server"
+   echo "bootimage.iso\t:Breakin 4.26"
 }
 
 listAvailableIsoFiles
