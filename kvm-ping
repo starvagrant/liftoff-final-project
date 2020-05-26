@@ -13,11 +13,11 @@ if [ $1 -eq 0 ]
 then
     for ip in ${kvmips[@]};
     do
-        ping -c 3 $ip
+        ping -c 2 -q $ip
     done
 else
     kvmunit=$1
     kvmunit=$(($kvmunit-1))
     kvmip="${kvmips[$kvmunit]}"
-    ping -c 3 $kvmip
+    ping -c 3 -q $kvmip
 fi

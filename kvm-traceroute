@@ -13,11 +13,11 @@ if [ $1 -eq 0 ]
 then
     for ip in ${kvmips[@]};
     do
-        traceroute $ip
+        traceroute -m 8 $ip
     done
 else
     kvmunit=$1
     kvmunit=$(($kvmunit-1))
     kvmip="${kvmips[$kvmunit]}"
-    traceroute $kvmip
+    traceroute -m 8 $kvmip
 fi
