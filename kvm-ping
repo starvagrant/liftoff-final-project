@@ -11,8 +11,12 @@ fi
 
 if [ $1 -eq 0 ]
 then
+    counter=1;
     for ip in ${kvmips[@]};
     do
+        echo -e "\033[01;32m KVM Unit:"
+        echo -e " $counter\033[00m"
+        counter=$(($counter+1))
         ping -c 2 -q $ip
     done
 else
