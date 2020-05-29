@@ -13,6 +13,14 @@ then
     exit
 fi
 
+if [ $1 == "lsisos" ]
+then
+    shift
+    kvm-lsisos $@
+    exit
+fi
+
+
 if [ $1 -lt 0 ]
 then
     echo "Assign kvm a number 1-5"
@@ -61,4 +69,6 @@ case $kvmcommand in
     clean)
         kvm-clean $kvmnumber $@
         ;;
+    mount)
+        kvm-mount $kvmnumber $@
 esac
