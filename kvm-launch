@@ -2,7 +2,7 @@
 . ~/.kvmrc
 UnitNumber="$1"
 WorkDir=~/.kvm/$1
-DomainName="KVM$1.UnrealServers.net"
+DomainName="kvm$1.unrealservers.net"
 
 function makeWorkingDirectory() {
     mkdir -p ${WorkDir}
@@ -38,7 +38,7 @@ function launchSpider() {
     javaws "${WorkDir}/spider.jnlp" &
 
     sleep 30
-    rm "${WorkDir}/spider.jnlp"
+    #rm "${WorkDir}/spider.jnlp"
     echo cleaned up spider.jnlp
 }
 

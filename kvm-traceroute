@@ -11,13 +11,17 @@ fi
 
 if [ $1 -eq 0 ]
 then
+    counter=1
     for ip in ${kvmips[@]};
     do
-        traceroute $ip
+        echo -e "\033[01;32m KVM Unit:"
+        echo -e " $counter\033[00m"
+        counter=$(($counter+1))
+        traceroute -m 8 $ip
     done
 else
     kvmunit=$1
-    kvmunit=$((i+1))
+    kvmunit=$(($kvmunit-1))
     kvmip="${kvmips[$kvmunit]}"
-    traceroute $kvmip
+    traceroute -m 8 $kvmip
 fi
