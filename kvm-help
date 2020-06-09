@@ -21,7 +21,7 @@ for individual customers and do not support wildcards:
 kvm passwd
 kvm launch
 kvm mail
-kvm loadiso
+kvm mount
 
 The following commands are device agnostic. They do not need a
 kvm number internally, but accept one nonetheless.
@@ -44,7 +44,7 @@ kvm mail: emails the latest message about a specific kvm to the
     so that it shows up in the company ticket system. This
     information should be the new password for the client
     account.
-kvm loadiso: sends an iso from the local samba server to the
+kvm mount: sends an iso from the local samba server to the
     kvm unit for reinstallation purposes.
 
 kvm lsisos: queries the local samba server for which isos are
